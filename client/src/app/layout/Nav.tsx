@@ -7,7 +7,7 @@ export const Nav = () => {
 
     <>
     
-    <AppBar position="static">
+    <AppBar position="static" sx={{mb: 4}}>
 
         <Typography variant="h6">
             .NET Store

@@ -13,7 +13,7 @@ export const ProductCard = ({product} : IProductCardProps) => {
     
     <>
 
-    <Card sx={{ maxWidth: 345 }}>
+    <Card>
         <CardMedia
             sx={{ height: 140 }}
             image="/static/images/cards/contemplative-reptile.jpg"
