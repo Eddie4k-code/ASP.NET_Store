@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { IProduct } from '../models/product';
+import { Catalog } from '../../features/catalog/Catalog';
+import { Typography } from '@mui/material';
 
-interface IProduct {
-
-  name: string
-  price: number
-
-}
 
 function App() {
 
@@ -28,15 +25,10 @@ useEffect(() => {
 
   return (
 
-    <>
-      <ul>
-        {
-          products.map(product => 
-            <li>{product.name}</li>
-          )
-        }
-      </ul>
-    </>
+    <div>
+      <Typography variant="h1">.NET Store</Typography>
+     <Catalog products={products} />
+    </div>
 
   );
 }
