@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { IProduct } from '../models/product';
 import { Catalog } from '../../features/catalog/Catalog';
-import { Typography } from '@mui/material';
+import { CssBaseline, Container } from '@mui/material';
+import { Nav } from './Nav';
 
 
 function App() {
@@ -25,10 +26,13 @@ useEffect(() => {
 
   return (
 
-    <div>
-      <Typography variant="h1">.NET Store</Typography>
+    <>
+    <CssBaseline />
+      <Nav />
+      <Container>
      <Catalog products={products} />
-    </div>
+     </Container>
+    </>
 
   );
 }
