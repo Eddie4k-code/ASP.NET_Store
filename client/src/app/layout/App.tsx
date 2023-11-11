@@ -13,16 +13,7 @@ function App() {
 
   
 
-const [products, setProducts] = useState<IProduct[]>([]);
 
-useEffect(() => {
-
-  fetch('http://localhost:5000/api/product')
-    .then(response => response.json())
-    .then(data => setProducts(data));
-
-}, []);
-  
 
   return (
 
@@ -30,7 +21,7 @@ useEffect(() => {
     <CssBaseline />
       <Nav />
       <Container>
-     <Catalog products={products} />
+     <Catalog />
      </Container>
     </>
 
