@@ -1,4 +1,4 @@
-import {Avatar, Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader } from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader } from "@mui/material";
 import { IProduct } from "../../app/models/product";
 
 interface IProductCardProps {

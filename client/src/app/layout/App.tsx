@@ -1,12 +1,23 @@
-import { useEffect, useState } from 'react'
+
 import './App.css'
-import { IProduct } from '../models/product';
 import { Catalog } from '../../features/catalog/Catalog';
-import { CssBaseline, Container } from '@mui/material';
+import { CssBaseline, Container, createTheme, ThemeProvider } from '@mui/material';
 import { Nav } from './Nav';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 
 function App() {
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  const paletteType = darkMode ? 'dark' : 'light';
+
+  const theme = createTheme({
+    palette: {
+      mode: paletteType
+    }
+  });
 
   
 
@@ -18,11 +29,13 @@ function App() {
   return (
 
     <>
+    <ThemeProvider theme={theme}>
     <CssBaseline />
       <Nav />
       <Container>
-     <Catalog />
+        <Outlet />
      </Container>
+     </ThemeProvider>
     </>
 
   );
