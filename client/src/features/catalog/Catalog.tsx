@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { IProduct } from "../../app/models/product";
 import { ProductList } from "./ProductList";
+import { caller } from "../../api/caller";
 
 
 
@@ -12,9 +13,7 @@ export const Catalog = () => {
 
     useEffect(() => {
 
-    fetch('http://localhost:5000/api/product')
-        .then(response => response.json())
-        .then(data => setProducts(data));
+        caller.catalog.list().then(data => setProducts(data));
 
     }, []);
   
