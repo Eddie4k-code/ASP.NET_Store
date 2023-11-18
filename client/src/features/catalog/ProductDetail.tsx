@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IProduct } from '../../app/models/product';
 import {Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material'
+import { caller, requests } from '../../api/caller';
 
 export const ProductDetail = () => {
     const {id} = useParams();
@@ -11,11 +12,16 @@ export const ProductDetail = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`http://localhost:5000/api/product/${id}`)
-            .then(response => setProduct(response.data))
-            .catch(error => console.log(error))
+
+        id && caller.catalog.productDetail(parseInt(id))
+            .then(response => setProduct(response))
+            .catch(error => console.log(error.response))
             .finally(() => setLoading(false));
+
+
     }, []);
+
+
 
     if (loading) {
         return <h2>Loading Product...</h2>

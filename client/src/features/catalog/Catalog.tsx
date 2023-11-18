@@ -11,8 +11,9 @@ export const Catalog = () => {
 
     const [products, setProducts] = useState<IProduct[]>([]);
 
-    useEffect(() => {
 
+    useEffect(() => {
+        // Fetch all products to show on catalog.
         caller.catalog.list().then(data => setProducts(data));
 
     }, []);
