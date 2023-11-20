@@ -1,8 +1,9 @@
 
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { caller } from "../../api/caller";
 import { ICart } from "../../app/models/cart";
 import {useState, useEffect} from 'react';
+import { Delete } from "@mui/icons-material";
 
 export const CartPage = () => {
 
@@ -51,10 +52,14 @@ export const CartPage = () => {
               <TableCell component="th" scope="row">
                 {item.name}
               </TableCell>
-              <TableCell align="right">{item.price}</TableCell>
+              <TableCell align="right">{(item.price / 100).toFixed(2)}</TableCell>
               <TableCell align="right">{item.quantity}</TableCell>
-              <TableCell align="right">${item.price * item.quantity}</TableCell>
-              <TableCell align="right">Delete</TableCell>
+              <TableCell align="right">${(item.price * item.quantity / 100).toFixed(2)}</TableCell>
+              <TableCell align="right">
+                <IconButton color="error">
+                    <Delete />
+                </IconButton>
+            </TableCell>
             </TableRow>
           ))}
         </TableBody>
