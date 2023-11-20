@@ -1,12 +1,27 @@
 import {Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader } from "@mui/material";
 import { IProduct } from "../../app/models/product";
 import {Link} from 'react-router-dom';
+import {useState} from 'react';
+import { caller } from "../../api/caller";
+import { LoadingButton } from "@mui/lab";
 
 interface IProductCardProps {
     product: IProduct
 }
 
 export const ProductCard = ({product} : IProductCardProps) => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>();
+
+    /* Functionality to handle adding an item to a user cart */
+    const onAddToCart = async (productId: number) => {
+        setLoading(true);
+        
+        await caller.cart.addItem(productId, 1).catch(err => console.log(err));
+
+        setLoading(false);
+        
+    }
 
 
 
@@ -41,7 +56,7 @@ export const ProductCard = ({product} : IProductCardProps) => {
     </CardContent>
 
     <CardActions>
-        <Button size="small">Add to Cart</Button>
+        <LoadingButton loading={loading} size="small" onClick={() => onAddToCart(product.id)}>Add to Cart</LoadingButton>
         <Button size="small" component={Link} to={`/catalog/${product.id}`}>View Item</Button>
     </CardActions>
 

@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.withCredentials = true; //allow browser to recieve cookie from backend.
 
 
 //Return data from a axios response
@@ -26,6 +27,15 @@ const catalog = {
 }
 
 
+//All API Requests to backend related to cart
+const cart = {
+    get: () => requests.get('cart'),
+    addItem: (productId: number, quantity = 1) => requests.post(`cart?productId=${productId}&quantity=${quantity}`, {}),
+    removeItem: (productId: number, quantity = 1) => requests.delete(`cart?productId=${productId}&quantity=${quantity}`)
+}
+
+
 export const caller = {
-    catalog
+    catalog,
+    cart
 }

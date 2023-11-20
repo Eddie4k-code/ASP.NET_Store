@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Middleware
 {
-
+    /* Middleware for shaping the data from an error */
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;

@@ -16,7 +16,7 @@ namespace API.Data
         //DB Set for the Product Model representing the Product Table in the DB.
         public DbSet<Product> Products {get; set;}
 
-
+        public DbSet<Cart> Carts {get; set;}
         
     }
 }

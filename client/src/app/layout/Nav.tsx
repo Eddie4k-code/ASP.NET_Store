@@ -1,6 +1,6 @@
 import {AppBar, Box, Toolbar, Typography, List, ListItem, IconButton, Badge} from "@mui/material";
 import {ShoppingCart} from '@mui/icons-material'
-import {NavLink} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 
 
 export const Nav = () => {
@@ -100,7 +100,7 @@ export const Nav = () => {
 
         </List>
 
-        <IconButton size='large' edge='start' color='inherit' sx={{mr: 2}}>
+        <IconButton component={Link} to='/cart' size='large' edge='start' color='inherit' sx={{mr: 2}}>
                 <Badge badgeContent='4'>
                 <ShoppingCart />
                 </Badge>
