@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import { caller } from "../../api/caller";
 import { LoadingButton } from "@mui/lab";
+import { useStoreContext } from "../../app/context/StoreContext";
 
 interface IProductCardProps {
     product: IProduct
@@ -12,12 +13,15 @@ interface IProductCardProps {
 export const ProductCard = ({product} : IProductCardProps) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>();
+    const {setCart} = useStoreContext();
 
     /* Functionality to handle adding an item to a user cart */
     const onAddToCart = async (productId: number) => {
         setLoading(true);
         
-        await caller.cart.addItem(productId, 1).catch(err => console.log(err));
+        await caller.cart.addItem(productId, 1)
+            .then(cart => setCart(cart))
+            .catch(err => console.log(err));
 
         setLoading(false);
         

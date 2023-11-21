@@ -1,9 +1,12 @@
 import {AppBar, Box, Toolbar, Typography, List, ListItem, IconButton, Badge} from "@mui/material";
 import {ShoppingCart} from '@mui/icons-material'
 import {Link, NavLink} from 'react-router-dom'
+import { useStoreContext } from "../context/StoreContext";
 
 
 export const Nav = () => {
+    const {cart} = useStoreContext();
+
 
     const stylesForNav = {
         color: 'white', 
@@ -101,7 +104,7 @@ export const Nav = () => {
         </List>
 
         <IconButton component={Link} to='/cart' size='large' edge='start' color='inherit' sx={{mr: 2}}>
-                <Badge badgeContent='4'>
+                <Badge badgeContent={cart ? cart.items.length : '0'}>
                 <ShoppingCart />
                 </Badge>
         </IconButton>

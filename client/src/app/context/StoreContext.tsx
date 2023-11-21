@@ -28,7 +28,7 @@ export const useStoreContext = () => {
 export const CartContextProvider = ({children}: PropsWithChildren<unknown>) => {
     const [cart, setCart] = useState<ICart | null>(null);
 
-
+    //remove item from cart or decrease quantity
     const removeItem = (productId: number, quantity: number) => {
 
         if (!cart) {
@@ -40,7 +40,7 @@ export const CartContextProvider = ({children}: PropsWithChildren<unknown>) => {
         const itemIndex = items.findIndex(i => i.productId === productId);
 
         if (itemIndex >= 0) {
-            items[itemIndex].quantity -= 1
+            items[itemIndex].quantity -= quantity
             if (items[itemIndex].quantity == 0) {
                 items.splice(itemIndex, 1);
             }

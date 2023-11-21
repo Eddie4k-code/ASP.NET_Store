@@ -1,34 +1,43 @@
 
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { caller } from "../../api/caller";
-import { ICart } from "../../app/models/cart";
 import {useState, useEffect} from 'react';
-import { Delete } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
+import { useStoreContext } from "../../app/context/StoreContext";
+
 
 export const CartPage = () => {
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const [cart, setCart] = useState<ICart | null>(null);
+  const {cart, removeItem, setCart} = useStoreContext();
+  const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => {
-        caller.cart.get()
-            .then(cart => setCart(cart))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
-    }, []);
-
-
-    if (loading) {
-        return <h3>Loading Cart...</h3>
-    }
-
+    
     if (!cart) {
         return <Typography variant="h3">Cart is Empty!</Typography>
     }
 
-    
+    //functionality to handle increasing the quantity on an item.
+    const onQuantityIncrease =  (productId: number) => {
+      setLoading(true);
+      caller.cart.addItem(productId)
+        .then(cart => setCart(cart))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false))
+
+    }
 
 
+    const onRemoveItem = (productId: number, quantity: number) => {
+      setLoading(true);
+      caller.cart.removeItem(productId, quantity)
+        .then(() => removeItem(productId, quantity))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false));
+    }
+
+
+
+  
     return (
 
         <>
@@ -38,7 +47,7 @@ export const CartPage = () => {
           <TableRow>
             <TableCell>Products</TableCell>
             <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="center">Quantity</TableCell>
             <TableCell align="right">Subtotal</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
@@ -50,13 +59,24 @@ export const CartPage = () => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {item.name}
+                <Box display='flex' alignItems='center'>
+                  <img src={item.pictureUrl} alt={item.name} style={{height: 50, marginRight: 20}}/>
+                  <span>{item.name}</span>
+                </Box>
               </TableCell>
               <TableCell align="right">{(item.price / 100).toFixed(2)}</TableCell>
-              <TableCell align="right">{item.quantity}</TableCell>
+              <TableCell align="center">
+                <IconButton color='error' onClick={() => onRemoveItem(item.productId, 1)}>
+                    <Remove />
+                </IconButton>
+                {item.quantity}
+                <IconButton color='secondary' onClick={() => onQuantityIncrease(item.productId)}>
+                    <Add />
+                </IconButton>
+                </TableCell>
               <TableCell align="right">${(item.price * item.quantity / 100).toFixed(2)}</TableCell>
               <TableCell align="right">
-                <IconButton color="error">
+                <IconButton color="error" onClick={() => onRemoveItem(item.productId, item.quantity)}>
                     <Delete />
                 </IconButton>
             </TableCell>
