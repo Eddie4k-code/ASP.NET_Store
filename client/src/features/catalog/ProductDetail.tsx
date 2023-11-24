@@ -6,12 +6,14 @@ import {Button, ButtonGroup, Divider, Grid, Table, TableBody, TableCell, TableCo
 import { caller, requests } from '../../api/caller';
 import { useStoreContext } from '../../app/context/StoreContext';
 import { LoadingButton } from '@mui/lab';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { setCart } from '../cart/cartSlice';
 
 export const ProductDetail = () => {
     const {id} = useParams();
     const [product, setProduct] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const {setCart} = useStoreContext();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         setLoading(true);
@@ -30,7 +32,7 @@ export const ProductDetail = () => {
         setLoading(true);
         
         await caller.cart.addItem(productId, 1)
-            .then(cart => setCart(cart))
+            .then(cart => dispatch(setCart(cart)))
             .catch(err => console.log(err));
 
         setLoading(false);

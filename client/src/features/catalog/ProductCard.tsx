@@ -5,6 +5,8 @@ import {useState} from 'react';
 import { caller } from "../../api/caller";
 import { LoadingButton } from "@mui/lab";
 import { useStoreContext } from "../../app/context/StoreContext";
+import { useAppDispatch } from "../../app/store/configureStore";
+import { setCart } from "../cart/cartSlice";
 
 interface IProductCardProps {
     product: IProduct
@@ -13,14 +15,14 @@ interface IProductCardProps {
 export const ProductCard = ({product} : IProductCardProps) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>();
-    const {setCart} = useStoreContext();
+    const dispatch = useAppDispatch();
 
     /* Functionality to handle adding an item to a user cart */
     const onAddToCart = (productId: number) => {
         setLoading(true);
         
         caller.cart.addItem(productId, 1)
-            .then(cart => setCart(cart))
+            .then(cart => dispatch(setCart(cart)))
             .catch(err => console.log(err));
 
         setLoading(false);

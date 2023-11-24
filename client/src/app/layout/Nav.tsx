@@ -2,10 +2,11 @@ import {AppBar, Box, Toolbar, Typography, List, ListItem, IconButton, Badge} fro
 import {ShoppingCart} from '@mui/icons-material'
 import {Link, NavLink} from 'react-router-dom'
 import { useStoreContext } from "../context/StoreContext";
+import { useAppSelector } from "../store/configureStore";
 
 
 export const Nav = () => {
-    const {cart} = useStoreContext();
+    const {cart} = useAppSelector(state => state.cart);
 
 
     const stylesForNav = {

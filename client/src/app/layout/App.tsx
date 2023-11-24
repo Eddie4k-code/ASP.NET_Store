@@ -9,11 +9,13 @@ import { useStoreContext } from '../context/StoreContext';
 import { useEffect, useState } from 'react';
 import { getCookie } from '../util/util';
 import { caller } from '../../api/caller';
+import { useAppDispatch } from '../store/configureStore';
+import { setCart } from '../../features/cart/cartSlice';
 
 
 function App() {
-
-  const {setCart} = useStoreContext();
+  const dispatch = useAppDispatch();
+  //const {setCart} = useStoreContext();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ function App() {
 
     if (buyerId) {
       let userExistingCart = caller.cart.get()
-        .then(cart => setCart(cart))
+        .then(cart => dispatch(setCart(cart)))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));
     }
@@ -34,7 +36,7 @@ function App() {
     
 
 
-  }, [setCart]);
+  }, [dispatch]);
 
 
   if (loading) {

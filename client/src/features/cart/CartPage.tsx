@@ -4,23 +4,24 @@ import { caller } from "../../api/caller";
 import {useState, useEffect} from 'react';
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { useStoreContext } from "../../app/context/StoreContext";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { setCart, removeItem } from "./cartSlice";
 
 
 export const CartPage = () => {
 
-  const {cart, removeItem, setCart} = useStoreContext();
+  const dispatch = useAppDispatch();
+  const {cart} = useAppSelector(state => state.cart);
   const [loading, setLoading] = useState<boolean>(false);
 
     
-    if (!cart) {
-        return <Typography variant="h3">Cart is Empty!</Typography>
-    }
+   
 
     //functionality to handle increasing the quantity on an item.
     const onQuantityIncrease =  (productId: number) => {
       setLoading(true);
       caller.cart.addItem(productId, 1)
-        .then(cart => setCart(cart))
+        .then(cart => dispatch(setCart(cart)))
         .catch(error => console.log(error))
         .finally(() => setLoading(false))
     }
@@ -29,14 +30,15 @@ export const CartPage = () => {
     const onRemoveItem = (productId: number, quantity: number) => {
       setLoading(true);
       caller.cart.removeItem(productId, quantity)
-        .then((cart) => setCart(cart))
-        .then(() => removeItem(productId, quantity))
+        .then(() => dispatch(removeItem({productId, quantity})))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));
     }
 
 
-
+    if (!cart) {
+      return <Typography variant="h3">Cart is Empty!</Typography>
+  }
   
     return (
 
