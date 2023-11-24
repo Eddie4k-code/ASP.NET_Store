@@ -12,15 +12,17 @@ public class Cart
 
 
     public void AddItem(Product product, int quantity) {
+        //Check if item does not exist already in cart
         if (this.Items.All(item => item.ProductId != product.Id)) {
-            Items.Add(new CartItem{Product = product, Quantity = quantity, ProductId = product.Id});
+            Items.Add(new CartItem{Product = product, Quantity = 1, ProductId = product.Id});
+            return;
         }
 
         //item already in cart
         var existingProductInCart = this.Items.FirstOrDefault(item => item.ProductId == product.Id);
 
         if (existingProductInCart != null) {
-            existingProductInCart.Quantity ++;
+            existingProductInCart.Quantity += quantity;
         }
 
 
@@ -35,7 +37,7 @@ public class Cart
             return;
         }
         //Decrease the quantity.
-        cartItem.Quantity --;
+        cartItem.Quantity -= quantity;
 
         //Cant have negative quantity so we need to remove it totally.
         if (cartItem.Quantity == 0) {

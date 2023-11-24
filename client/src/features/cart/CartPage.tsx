@@ -19,17 +19,17 @@ export const CartPage = () => {
     //functionality to handle increasing the quantity on an item.
     const onQuantityIncrease =  (productId: number) => {
       setLoading(true);
-      caller.cart.addItem(productId)
+      caller.cart.addItem(productId, 1)
         .then(cart => setCart(cart))
         .catch(error => console.log(error))
         .finally(() => setLoading(false))
-
     }
 
 
     const onRemoveItem = (productId: number, quantity: number) => {
       setLoading(true);
       caller.cart.removeItem(productId, quantity)
+        .then((cart) => setCart(cart))
         .then(() => removeItem(productId, quantity))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));

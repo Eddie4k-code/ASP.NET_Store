@@ -2,13 +2,16 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IProduct } from '../../app/models/product';
-import {Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material'
+import {Button, ButtonGroup, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material'
 import { caller, requests } from '../../api/caller';
+import { useStoreContext } from '../../app/context/StoreContext';
+import { LoadingButton } from '@mui/lab';
 
 export const ProductDetail = () => {
     const {id} = useParams();
     const [product, setProduct] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const {setCart} = useStoreContext();
 
     useEffect(() => {
         setLoading(true);
@@ -20,6 +23,19 @@ export const ProductDetail = () => {
 
 
     }, []);
+
+
+    /* Functionality to handle adding an item to a user cart */
+    const onAddToCart = async (productId: number) => {
+        setLoading(true);
+        
+        await caller.cart.addItem(productId, 1)
+            .then(cart => setCart(cart))
+            .catch(err => console.log(err));
+
+        setLoading(false);
+        
+    }
 
 
 
@@ -89,6 +105,8 @@ export const ProductDetail = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Button size='small' onClick={() => onAddToCart(product.id)}>Add to Cart</Button>
 
         </Grid>
 

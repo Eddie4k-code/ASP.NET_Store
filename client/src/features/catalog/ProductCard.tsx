@@ -16,10 +16,10 @@ export const ProductCard = ({product} : IProductCardProps) => {
     const {setCart} = useStoreContext();
 
     /* Functionality to handle adding an item to a user cart */
-    const onAddToCart = async (productId: number) => {
+    const onAddToCart = (productId: number) => {
         setLoading(true);
         
-        await caller.cart.addItem(productId, 1)
+        caller.cart.addItem(productId, 1)
             .then(cart => setCart(cart))
             .catch(err => console.log(err));
 
