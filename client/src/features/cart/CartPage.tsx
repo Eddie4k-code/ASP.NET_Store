@@ -5,7 +5,7 @@ import {useState, useEffect} from 'react';
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { setCart, removeItem } from "./cartSlice";
+import { setCart, removeItem, addCartItemAsync } from "./cartSlice";
 
 
 export const CartPage = () => {
@@ -20,10 +20,8 @@ export const CartPage = () => {
     //functionality to handle increasing the quantity on an item.
     const onQuantityIncrease =  (productId: number) => {
       setLoading(true);
-      caller.cart.addItem(productId, 1)
-        .then(cart => dispatch(setCart(cart)))
-        .catch(error => console.log(error))
-        .finally(() => setLoading(false))
+      dispatch(addCartItemAsync({productId: productId, quantity: 1}));
+      setLoading(false);
     }
 
 

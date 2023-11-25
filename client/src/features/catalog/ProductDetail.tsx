@@ -7,7 +7,7 @@ import { caller, requests } from '../../api/caller';
 import { useStoreContext } from '../../app/context/StoreContext';
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../app/store/configureStore';
-import { setCart } from '../cart/cartSlice';
+import { addCartItemAsync, setCart } from '../cart/cartSlice';
 
 export const ProductDetail = () => {
     const {id} = useParams();
@@ -31,9 +31,7 @@ export const ProductDetail = () => {
     const onAddToCart = async (productId: number) => {
         setLoading(true);
         
-        await caller.cart.addItem(productId, 1)
-            .then(cart => dispatch(setCart(cart)))
-            .catch(err => console.log(err));
+        dispatch(addCartItemAsync({productId: productId, quantity: 1}));
 
         setLoading(false);
         

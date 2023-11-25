@@ -13,7 +13,7 @@ const initialState: CartState = {
 }
 
 //Async thunk for adding an item to a user cart
-const addCartItemAsync = createAsyncThunk<ICart, {productId: number, quantity: number}>(
+export const addCartItemAsync = createAsyncThunk<ICart, {productId: number, quantity: number}>(
     'cart/addCartItemAsync',
     async ({productId, quantity}) => {
         try {
@@ -23,6 +23,22 @@ const addCartItemAsync = createAsyncThunk<ICart, {productId: number, quantity: n
         } catch(err) {
             console.log(err);
         }
+    }
+)
+
+
+export const removeCartItemAsync = createAsyncThunk<void, {productId: number, quantity: number}>(
+    'cart/removeCartItemAsync',
+    async ({productId, quantity}) => {
+
+        try {
+
+            await caller.cart.removeItem(productId, quantity);
+
+        } catch (err) {
+            console.log(err);
+        }
+
     }
 )
 
@@ -66,6 +82,8 @@ export const cartSlice = createSlice({
         builder.addCase(addCartItemAsync.rejected, (state) => {
             state.status = 'idle';
         });
+
+
 
     })
 });

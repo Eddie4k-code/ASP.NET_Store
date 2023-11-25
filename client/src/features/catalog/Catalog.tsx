@@ -17,6 +17,11 @@ export const Catalog = () => {
         caller.catalog.list().then(data => setProducts(data));
 
     }, []);
+
+
+    if (products.length == 0) {
+        return <h3>No products to load at this time...</h3>
+    }
   
 
 

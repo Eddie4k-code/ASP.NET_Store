@@ -5,8 +5,8 @@ import {useState} from 'react';
 import { caller } from "../../api/caller";
 import { LoadingButton } from "@mui/lab";
 import { useStoreContext } from "../../app/context/StoreContext";
-import { useAppDispatch } from "../../app/store/configureStore";
-import { setCart } from "../cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { addCartItemAsync, setCart } from "../cart/cartSlice";
 
 interface IProductCardProps {
     product: IProduct
@@ -16,18 +16,7 @@ export const ProductCard = ({product} : IProductCardProps) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>();
     const dispatch = useAppDispatch();
-
-    /* Functionality to handle adding an item to a user cart */
-    const onAddToCart = (productId: number) => {
-        setLoading(true);
-        
-        caller.cart.addItem(productId, 1)
-            .then(cart => dispatch(setCart(cart)))
-            .catch(err => console.log(err));
-
-        setLoading(false);
-        
-    }
+    const {status} = useAppSelector(state => state.cart);
 
 
 
@@ -62,8 +51,8 @@ export const ProductCard = ({product} : IProductCardProps) => {
     </CardContent>
 
     <CardActions>
-        <LoadingButton loading={loading} size="small" onClick={() => onAddToCart(product.id)}>Add to Cart</LoadingButton>
-        <Button size="small" component={Link} to={`/catalog/${product.id}`}>View Item</Button>
+        <LoadingButton loading={status.includes('pending')} size="small" onClick={() => dispatch(addCartItemAsync({productId: product.id, quantity: 1}))}>Add to Cart</LoadingButton>
+        <Button size="small" component={Link} to={`/catalog/${product.id}`}>Views Item</Button>
     </CardActions>
 
     </Card>
