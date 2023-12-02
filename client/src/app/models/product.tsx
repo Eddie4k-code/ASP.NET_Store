@@ -9,3 +9,12 @@ export interface IProduct {
     brand: string,
     quantityInStock?: number
 }
+
+
+//Params needed for request related to product
+export interface IProductParams {
+    orderBy?: string
+    searchTerm?: string
+    pageNumber: number
+    pageSize: number
+}
