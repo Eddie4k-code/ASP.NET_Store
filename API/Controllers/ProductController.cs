@@ -1,3 +1,6 @@
+using System.Text.Json;
+using api.Extensions;
+using api.RequestHelpers;
 using API.Data;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +21,27 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts() {
-            var products = await this._context.Products.ToListAsync<Product>();
+        public async Task<ActionResult<PagedList<Product>>> GetProducts
+        (
+            [FromQuery] string? orderBy, 
+            [FromQuery] string? searchTerm,
+            [FromQuery] PaginationParams paginationParams
+        ) {
+            //var products = await this._context.Products.ToListAsync<Product>();
+
+            //use our extension method we created to query
+            var query = this._context.Products
+                .Sort(orderBy)
+                .Search(searchTerm)
+                .AsQueryable();
+
+            var products = await PagedList<Product>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(products.MetaData); //add pagination info in header
+
+
+           
+
 
             return Ok(products);
         }
@@ -36,6 +58,7 @@ namespace API.Controllers
             return Ok(product);
 
         }
+
 
 
         
