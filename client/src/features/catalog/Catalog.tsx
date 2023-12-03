@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { IProduct } from "../../app/models/product";
 import { ProductList } from "./ProductList";
 import { caller, getAxiosProductParams } from "../../api/caller";
-import { FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, TextField } from "@mui/material";
+import { Box, FormControl, FormControlLabel, FormLabel, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { IPagination } from "../../app/models/pagination";
+import { AppPagination } from "./AppPagination";
 
 
 const sortOptions = [
@@ -19,21 +21,26 @@ export const Catalog = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [sortOption, setSortOption] = useState<string>(sortOptions[0].value);
     const [searchTerm, setSearchTerm] = useState<undefined | string>(undefined);
-    const [paginationInfo, setPaginationInfo] = useState({
-        pageNumber : 1,
-        pageSize: 6
-    });
-
+    const [pageNumber, setPagenumber] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(6);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
     useEffect(() => {
 
-        const params = getAxiosProductParams({pageNumber: paginationInfo.pageNumber, pageSize: paginationInfo.pageSize, orderBy: sortOption, searchTerm});
+        const params = getAxiosProductParams({pageNumber: pageNumber, pageSize: pageSize, orderBy: sortOption, searchTerm});
 
         // Fetch all products to show on catalog.
         caller.catalog.list(params)
-            .then(data => setProducts(data));
+            .then(response => {
+                setProducts(response.data);
+                const pagination: IPagination = JSON.parse(response.headers['pagination']);
+                console.log(pagination);
+                setPagenumber(pagination.CurrentPage)
+                setTotalPages(pagination.TotalPages)
 
-    }, [searchTerm, sortOption]);
+            });
+
+    }, [searchTerm, sortOption, pageNumber]);
 
 
     if (products.length == 0) {
@@ -110,13 +117,18 @@ export const Catalog = () => {
 
         <Grid item xs={9}>
         <ProductList products={products} />
+        <AppPagination totalPages={totalPages} pageNumber={pageNumber} onPageChange={(page) => setPagenumber(page)}/>
 
 
         </Grid>
 
+        
+
+
 
 
     </Grid>
+                       
     </Grid>
 
 

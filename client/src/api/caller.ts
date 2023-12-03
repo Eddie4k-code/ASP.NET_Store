@@ -12,10 +12,12 @@ axios.defaults.withCredentials = true; //allow browser to recieve cookie from ba
 
 //Return data from a axios response
 const responseBody = (response: AxiosResponse) => response.data;
+const response = (response: AxiosResponse) => response;
 
 //Handle all types of axios requests
 export const requests = {
     get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
+    getWithFullResponse: (url: string, params: URLSearchParams) => axios.get(url, {params}).then(response),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),
@@ -24,7 +26,7 @@ export const requests = {
 
 //All API Requests to backend related to Catalog
 const catalog = {
-    list: (params: URLSearchParams) => requests.get('product', params), //Fetch all products
+    list: (params: URLSearchParams) => requests.getWithFullResponse('product', params), //Fetch all products
     productDetail: (id: number) => requests.get(`product/${id}`) //fetch specific product based on id
 }
 //Retrieve all axios params related to fetching products
