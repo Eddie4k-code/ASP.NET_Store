@@ -17,7 +17,7 @@ const response = (response: AxiosResponse) => response;
 //Handle all types of axios requests
 export const requests = {
     get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
-    getWithFullResponse: (url: string, params: URLSearchParams) => axios.get(url, {params}).then(response),
+    getWithFullResponse: (url: string, params: URLSearchParams) => axios.get(url, {params}).then(response), //when needing full response returned so we can extract headers
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),

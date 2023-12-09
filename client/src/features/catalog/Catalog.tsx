@@ -26,21 +26,29 @@ export const Catalog = () => {
     const [totalPages, setTotalPages] = useState<number>(0);
 
     useEffect(() => {
-
-        const params = getAxiosProductParams({pageNumber: pageNumber, pageSize: pageSize, orderBy: sortOption, searchTerm});
+        const params = getAxiosProductParams({
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            orderBy: sortOption,
+            searchTerm,
+        });
 
         // Fetch all products to show on catalog.
-        caller.catalog.list(params)
-            .then(response => {
-                setProducts(response.data);
-                const pagination: IPagination = JSON.parse(response.headers['pagination']);
-                console.log(pagination);
-                setPagenumber(pagination.CurrentPage)
-                setTotalPages(pagination.TotalPages)
-
-            });
-
+        caller.catalog.list(params).then((response) => {
+            setProducts(response.data);
+            const pagination: IPagination = JSON.parse(
+                response.headers['pagination']
+            );
+            setPagenumber(pagination.CurrentPage);
+            setTotalPages(pagination.TotalPages);
+        });
     }, [searchTerm, sortOption, pageNumber]);
+
+    const handleSearchTermChange = (term: string) => {
+        // Reset the page number to 1 when the search term changes
+        setSearchTerm(term);
+        setPagenumber(1);
+    };
 
 
     if (products.length == 0) {
@@ -51,7 +59,7 @@ export const Catalog = () => {
     
                 <Paper sx={{mb: 2}}>
     
-                    <TextField onChange={(e) => setSearchTerm(e.target.value)}label="Search Products" variant="outlined" fullWidth/>
+                    <TextField onChange={(e) => handleSearchTermChange(e.target.value)}label="Search Products" variant="outlined" fullWidth/>
     
                 </Paper>
     
@@ -87,52 +95,50 @@ export const Catalog = () => {
 
 
     return (
-    <Grid container>
-    <Grid container spacing={4}>
-
-        <Grid item xs={3}>
-
-            <Paper sx={{mb: 2}}>
-
-                <TextField onChange={(e) => setSearchTerm(e.target.value)}label="Search Products" variant="outlined" fullWidth/>
-
-            </Paper>
-
-            <Paper sx={{mb:2, p:2}}>
-
-            <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Sort</FormLabel>
-                <RadioGroup >
-                    {sortOptions.map(option => 
-
-                    <FormControlLabel onClick={() => setSortOption(option.value)} value={option.value} control={<Radio />} label={option.label} />
-
-                    )}
-                 </RadioGroup>
-            </FormControl>
-
-            </Paper>
-
+        <Grid container>
+            <Grid container spacing={4}>
+                <Grid item xs={3}>
+                    <Paper sx={{ mb: 2 }}>
+                        <TextField
+                            onChange={(e) =>
+                                setSearchTerm(e.target.value)
+                            }
+                            label="Search Products"
+                            variant="outlined"
+                            fullWidth
+                        />
+                    </Paper>
+                    <Paper sx={{ mb: 2, p: 2 }}>
+                        <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                                Sort
+                            </FormLabel>
+                            <RadioGroup>
+                                {sortOptions.map((option) => (
+                                    <FormControlLabel
+                                        onClick={() =>
+                                            setSortOption(option.value)
+                                        }
+                                        value={option.value}
+                                        control={<Radio />}
+                                        label={option.label}
+                                    />
+                                ))}
+                            </RadioGroup>
+                        </FormControl>
+                    </Paper>
+                </Grid>
+                <Grid item xs={9}>
+                    <ProductList products={products} />
+                    <Grid container justifyContent="center" sx={{mt: 2}}>
+                        <AppPagination
+                            totalPages={totalPages}
+                            pageNumber={pageNumber}
+                            onPageChange={(page) => setPagenumber(page)}
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
         </Grid>
-
-        <Grid item xs={9}>
-        <ProductList products={products} />
-        <AppPagination totalPages={totalPages} pageNumber={pageNumber} onPageChange={(page) => setPagenumber(page)}/>
-
-
-        </Grid>
-
-        
-
-
-
-
-    </Grid>
-                       
-    </Grid>
-
-
     );
-
-}
-
+};
