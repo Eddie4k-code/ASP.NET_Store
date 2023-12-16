@@ -60,6 +60,8 @@ namespace API.Controllers {
                 cart = CreateCart();
             }
 
+            
+
 
             // get the product
             var product = await this._context.Products.FindAsync(productId);

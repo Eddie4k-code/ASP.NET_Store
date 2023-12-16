@@ -11,6 +11,7 @@ import { getCookie } from '../util/util';
 import { caller } from '../../api/caller';
 import { useAppDispatch } from '../store/configureStore';
 import { setCart } from '../../features/cart/cartSlice';
+import { fetchCurrentUser } from '../../features/account/accountSlice';
 
 
 function App() {
@@ -21,6 +22,10 @@ function App() {
   useEffect(() => {
     // if the user already had an existing cart we need to update that state.
     const buyerId = getCookie("buyerId");
+
+    dispatch(fetchCurrentUser());
+
+
 
     setLoading(true);
 

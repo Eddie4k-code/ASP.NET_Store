@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Models;
+using API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +14,17 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly UserManager<User> _userManager;
+        private readonly TokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager) {
+        public AccountController(UserManager<User> userManager, TokenService tokenService) {
 
             _userManager = userManager;
+            _tokenService = tokenService;
 
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(LoginDto loginDto) 
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto) 
         {
 
             //check if user is in db
@@ -32,7 +36,13 @@ namespace API.Controllers
 
             }
 
-            return Ok(user);
+
+            return Ok(new UserDto
+            {
+                Email = user.Email!,
+                Token = await _tokenService.GenerateToken(user)
+            });
+
 
         }
 
@@ -57,6 +67,23 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {   
+
+            //grab name claim out of token
+
+            var user = await _userManager.FindByNameAsync(User.Identity!.Name!);
+
+            return new UserDto
+            {
+                Email = user!.Email!,
+                Token = await _tokenService.GenerateToken(user)
+            };
+
+        } 
         
     }
 }

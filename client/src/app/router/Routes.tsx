@@ -5,6 +5,8 @@ import { ProductDetail } from "../../features/catalog/ProductDetail";
 import { PageNotFound } from "../layout/PageNotFound";
 import { CartPage } from "../../features/cart/CartPage";
 import { Test } from "../../test/test";
+import { Login } from "../../features/account/Login";
+import { Register } from "../../features/account/Register";
 
 
 export const router = createBrowserRouter([
@@ -16,7 +18,9 @@ export const router = createBrowserRouter([
             {path: 'catalog/:id', element: <ProductDetail />},
             {path: 'cart', element: <CartPage />},
             {path: '*', element: <PageNotFound />},
-            {path: 'test', element:<Test />}
+            {path: 'test', element:<Test />},
+            {path: 'login', element: <Login />},
+            {path: 'register', element: <Register />}
         ]
     }
 ]);

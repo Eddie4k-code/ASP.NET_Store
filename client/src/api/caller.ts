@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import {toast} from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import { IProductParams } from '../app/models/product';
+import { User } from '../app/models/user';
+import { store } from '../app/store/configureStore';
 
 
 //ALL API REQUESTS TO BACKEND RELATED FUNCTIONALITY
@@ -9,6 +11,18 @@ import { IProductParams } from '../app/models/product';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.withCredentials = true; //allow browser to recieve cookie from backend.
 
+// add authorization header to request if token exists
+axios.interceptors.request.use(config => {
+
+    const token = store.getState().account.user?.token;
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
+
+    return config;
+
+});
 
 //Return data from a axios response
 const responseBody = (response: AxiosResponse) => response.data;
@@ -57,10 +71,18 @@ const cart = {
     removeItem: (productId: number, quantity = 1) => requests.delete(`cart?productId=${productId}&quantity=${quantity}`)
 }
 
+//All api Requests to backend related to user accounts.
+const account = {
+    login: (values: any) => requests.post('account/login', values),
+    register: (values: any) => requests.post('account/regiser', values),
+    getCurrentUser: () => requests.get('account/currentUser')
+}
+
 
 
 
 export const caller = {
     catalog,
-    cart
+    cart,
+    account
 }
