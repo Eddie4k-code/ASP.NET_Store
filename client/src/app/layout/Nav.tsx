@@ -3,10 +3,12 @@ import {ShoppingCart} from '@mui/icons-material'
 import {Link, NavLink} from 'react-router-dom'
 import { useStoreContext } from "../context/StoreContext";
 import { useAppSelector } from "../store/configureStore";
+import { SignedInMenu } from "./SignedInMenu";
 
 
 export const Nav = () => {
     const {cart} = useAppSelector(state => state.cart);
+    const {user} = useAppSelector(state => state.account)
 
 
     const stylesForNav = {
@@ -26,11 +28,15 @@ export const Nav = () => {
         {title: '', path: '/catalog'}
     ];
 
-    const authLinks: {title: string, path: string}[] = [
+    let authLinks: {title: string, path: string}[] = [
         {title: 'catalog', path:'/catalog'},
         {title: 'login', path: '/login'},
         {title: 'register', path:'/register'}
     ];
+
+    if (user !== null) {
+        authLinks = authLinks.filter(link => link.title !== 'login' && link.title != 'register');
+      }
 
 
     return(
@@ -76,12 +82,21 @@ export const Nav = () => {
 
 
 
+
+
         <Box sx={{display: 'flex', alignItems: 'center'}}>
+
+        
 
         
 
         <List sx={{display: 'flex'}}
         >
+             <IconButton component={Link} to='/cart' size='large' edge='start' color='inherit' sx={{mr: 2}}>
+                <Badge badgeContent={cart ? cart.items.length : '0'}>
+                <ShoppingCart />
+                </Badge>
+        </IconButton>
 
             {authLinks.map(link => 
 
@@ -104,11 +119,9 @@ export const Nav = () => {
 
         </List>
 
-        <IconButton component={Link} to='/cart' size='large' edge='start' color='inherit' sx={{mr: 2}}>
-                <Badge badgeContent={cart ? cart.items.length : '0'}>
-                <ShoppingCart />
-                </Badge>
-        </IconButton>
+        
+        {user && <SignedInMenu />}
+        
 
         
 

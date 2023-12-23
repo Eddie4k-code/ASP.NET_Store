@@ -3,7 +3,9 @@ import { User } from "../../app/models/user";
 import { Agent } from "http";
 import { caller } from "../../api/caller";
 import { FieldValues } from "react-hook-form";
-
+import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { router } from "../../app/router/Routes";
 /* Handle user state throughout application */
 
 interface AccountState {
@@ -13,6 +15,8 @@ interface AccountState {
 const initalState: AccountState = {
     user: null
 }
+
+
 
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -62,7 +66,16 @@ export const accountSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload;
-        }
+
+            
+        },
+
+        logout: (state) => {
+            state.user = null;
+            localStorage.removeItem('user');
+            router.navigate('/catalog')
+        },
+        
     },
     extraReducers: (builder => {
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
@@ -75,4 +88,4 @@ export const accountSlice = createSlice({
     })
 });
 
-export const {setUser} = accountSlice.actions;
+export const {setUser, logout} = accountSlice.actions;
