@@ -23,12 +23,14 @@ function App() {
     // if the user already had an existing cart we need to update that state.
     const buyerId = getCookie("buyerId");
 
+    //fetch current user if token is valid.
     dispatch(fetchCurrentUser());
 
 
 
     setLoading(true);
 
+    //get the users cart if one exsts.
     if (buyerId) {
       let userExistingCart = caller.cart.get()
         .then(cart => dispatch(setCart(cart)))

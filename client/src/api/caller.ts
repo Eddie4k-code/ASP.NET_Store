@@ -74,9 +74,10 @@ const cart = {
 //All api Requests to backend related to user accounts.
 const account = {
     login: (values: any) => requests.post('account/login', values),
-    register: (values: any) => requests.post('account/regiser', values),
+    register: (values: any) => requests.post('account/register', values),
     getCurrentUser: () => requests.get('account/currentUser')
 }
+
 
 
 

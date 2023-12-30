@@ -6,6 +6,7 @@ import { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { router } from "../../app/router/Routes";
+import { toast } from "react-toastify";
 /* Handle user state throughout application */
 
 interface AccountState {
@@ -78,6 +79,24 @@ export const accountSlice = createSlice({
         
     },
     extraReducers: (builder => {
+        
+        builder.addCase(fetchCurrentUser.rejected, (state, action) => {
+            state.user = null;
+            localStorage.removeItem("user");
+            toast.error("Session expired please login again.");
+            
+        });
+
+
+        builder.addCase(signInUser.rejected, (state, action) => {
+            state.user = null;
+            localStorage.removeItem("user");
+            toast.error("Incorrect Username or Password...");
+            router.navigate('/login')
+            
+        });
+        
+
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
             state.user = action.payload;
         });

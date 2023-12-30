@@ -34,7 +34,12 @@ export const Login = () => {
     const submitForm = async (data: FieldValues) => {
 
         await dispatch(signInUser(data));
-        navigate('/catalog');
+
+
+
+        if (localStorage.getItem("user")) {
+          navigate('/catalog');
+        } 
 
     }
 
